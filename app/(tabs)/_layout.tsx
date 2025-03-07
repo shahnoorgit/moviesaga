@@ -1,45 +1,35 @@
+import { icons } from '@/constants/icons';
+import { images } from '@/constants/images';
 import { Tabs } from 'expo-router';
 import React from 'react';
-import { Platform } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, Image } from 'react-native';
 
-import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
-
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
-  return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
-          },
-          default: {},
-        }),
-      }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
-        }}
-      />
-    </Tabs>
-  );
+const TabBarIconComponet=({focus,icon,title})=>{
+    return <>
+    <ImageBackground className=' flex-1 justify-center items-center overflow-hidden rounded-full w-full flex-row flex min-w-[112px] min-h-14 mt-4' source={images.highlight}>
+        <Image source={icon} className=' size-5' tintColor="#E6E6FA"/>
+        <Text className=' text-secondary text-base ml-2 font-semibold'>{title}</Text>
+    </ImageBackground></>
 }
+
+const Layout: React.FC = () => {
+    return (
+       <Tabs>
+        <Tabs.Screen name="index" options={{ title:"home",headerShown:false,tabBarIcon:({focused})=>(
+            <TabBarIconComponet title={"Home"} focus={focused} icon={icons.home}/>
+        )}} />
+        <Tabs.Screen name="Save" options={{headerShown:false,tabBarIcon:({focused})=>(
+            <TabBarIconComponet focus={focused} title={"Saved"} icon={icons.save}/>)}} />
+        <Tabs.Screen name="Profile" options={{headerShown:false,tabBarIcon:({focused})=>(
+            <TabBarIconComponet focus={focused} title={"Profile"} icon={icons.person}/>
+        )}} />
+        <Tabs.Screen name="Search" options={{headerShown:false,tabBarIcon:({focused})=>(
+            <TabBarIconComponet focus={focused} title={"Search"} icon={icons.search}/>
+        )}} />
+       </Tabs>
+    );
+};
+
+
+
+export default Layout;
